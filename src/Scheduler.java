@@ -45,6 +45,7 @@ public class Scheduler {
 
         //what's optimization?
         int NUM_TEAMS = Integer.parseInt(settings[0]);
+        //x robots per match
         int MATCH_SIZE = 4;
         //todo: always exceeds the match limit by one for some reason?
         //my fix was to just make MATCH_CAP one less than the inputted cap, but thats a total bandaid

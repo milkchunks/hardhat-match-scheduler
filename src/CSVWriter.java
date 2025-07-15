@@ -8,8 +8,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class CSVWriter {
-    public static void CSVExporter(String[][] data, String name) {
+public abstract class CSVWriter {
+    public static void exportCSV(String[][] data, String name) {
         String CSV_DIRECTORY = "C:\\match scheduler csvs\\";
         File dir = new File(CSV_DIRECTORY);
         boolean failed = dir.mkdir();

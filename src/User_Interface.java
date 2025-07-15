@@ -125,7 +125,7 @@ public abstract class User_Interface {
                 settings.setRowHeight((int) (CTRL_WEIGHT * frame.getHeight()) / settings.getRowCount());
             }
 
-            //lazy
+            //lazy 
             @Override
             public void componentMoved(ComponentEvent e) {}
 

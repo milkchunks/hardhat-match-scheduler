@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="hardhat-match-maker:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/hardhat_match_maker_jar</output-path>
+    <root id="archive" name="hardhat-match-maker.jar">
+      <element id="module-output" name="hardhat-match-maker" />
+    </root>
+  </artifact>
+</component>

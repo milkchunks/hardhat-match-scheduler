@@ -11,12 +11,12 @@
 //.h: declare what is in the class (?)
 class Scheduler {
     private:
-    std::string teamNames[];
+    static std::string teamNames[];
 
     //idfk if this is good practice :(
     //i don't think it was even good practice in java
     //note: inner classes are NOT hoisted
-    class Team {
+    static class Team {
         public:
         int numMatchesPlayed = 0;
         int teamNumber;
@@ -29,12 +29,13 @@ class Scheduler {
         }
     };
 
-    std::vector<Team> sortAscending();
+    static std::vector<Team> sortAscending();
 
     public:
-    void changeTeamNames();
-    void prepareTeamCSV();
-    void prepareScheduleCSV();
+    static void changeTeamNames(std::string newNames[]);
+    static void prepareTeamCSV();
+    static void prepareScheduleCSV();
+    Scheduler(std::string teamNames[]);
 };
 
 

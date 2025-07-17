@@ -6,4 +6,4 @@
 static void exportCSV(std::string[][], std::string name) {
     std::string CSV_DIRECTORY = "C:\\match scheduler csvs\\";
 
-}
+} 

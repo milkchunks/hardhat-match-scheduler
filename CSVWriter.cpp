@@ -16,7 +16,7 @@
 namespace files = std::filesystem;
 
 //data is now the C++ equivalent of a two-dimensional ArrayList of strings
-static void exportCSV(std::vector<std::vector<std::string>> data, std::string name) {
+static void CSVWriter::exportCSV(std::vector<std::vector<std::string>> data, std::string name) {
     std::string CSV_DIRECTORY = "C:\\match scheduler csvs\\";
     //make a new directory for the CSV file
     //TODO: don't make the directory if it already exists probably

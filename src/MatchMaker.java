@@ -4,21 +4,19 @@
 //
 
 public class MatchMaker {
-    private static User_Interface ui = new User_Interface();
-    private CSVWriter writer = new CSVWriter();
-
     public static void main(String[] args) {
+        User_Interface.start();
     }
 
     public static void callCSV(String[][] data, String name) {
-        CSVWriter.CSVExporter(data, name);
+        CSVWriter.exportCSV(data, name);
     }
 
     public static String[] pollUISettings() {
-        return ui.pollSettings();
+        return User_Interface.pollSettings();
     }
 
     public static void statusUPD(String msg) {
-        ui.statusUpdate(msg);
+        User_Interface.statusUpdate(msg);
     }
 }

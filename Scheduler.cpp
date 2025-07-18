@@ -10,9 +10,8 @@
 #include "CSVWriter.h"
 //.cpp: fill out what was outlined in .h
 Scheduler::Scheduler(std::vector<std::string> names) {
-
     for (int i = 0; i < names.size(); i++) {
-        teamNames[i].assign(1, names[i]);
+        teamNames[i].assign(names[i]);
     }
     //update all CSVs with new names.
     prepareTeamCSV();
@@ -56,6 +55,30 @@ void Scheduler::prepareTeamCSV() {
     writer.exportCSV(output, "teams.csv");
 }
 
-void Scheduler::changeTeamNames(std::string newNames[]) {
-    teamNames = newNames;
+void Scheduler::changeTeamNames(std::vector<std::string> names) {
+    for (int i = 0; i < names.size(); i++) {
+        teamNames[i].assign(names[i]);
+    }
+}
+
+std::vector<Team> Scheduler::sortAscending(std::vector<Team> arr) {
+    for (int i = 1; i < arr.size(); i++) {
+        Team temp = arr[i];
+        int j = i-1;
+
+        while (j >= 0 && arr[j].matchesPlayed > temp.matchesPlayed) {
+            arr[j+1] = arr[j];
+            j = j-1;
+        }
+        arr[j+1] = temp;
+    }
+
+    return arr;
+}
+
+static bool teamListContains(std::vector<Team> arr, Team val) {
+    for (int i = 0; i < arr.size(); i++) {\
+        //todo: CANNOT CHECK FOR NULL.
+        if (arr[i] == val) return true;
+    }
 }

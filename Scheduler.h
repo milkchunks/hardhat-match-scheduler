@@ -13,15 +13,15 @@
 //.h: declare what is in the class (?)
 class Scheduler {
     private:
-    static std::vector<std::string> teamNames[];
-
-    static std::vector<Team> sortAscending();
+    static std::vector<std::string> teamNames;
+    static std::vector<Team> sortAscending(std::vector<Team> arr);
+    static bool teamListContains(std::vector<Team> arr, Team val);
 
     public:
-    static void changeTeamNames(std::string newNames[]);
+    static void changeTeamNames(std::vector<std::string> names);
     static void prepareTeamCSV();
     static void prepareScheduleCSV();
-    Scheduler(std::vector<std::string> names);
+    explicit Scheduler(std::vector<std::string> names);
 };
 
 

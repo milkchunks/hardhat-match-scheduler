@@ -113,7 +113,8 @@ void prepareScheduleCSV() {
 		//this loop populates a match
 		for (int j = 0; j < thisMatch.size(); j++) {
 			//cube root to make it trend towards smaller indices (the candidates who have played the least games!)
-			Team* chosenTeam = candidates[std::floor(std::cbrt(std::rand()) % candidates.size())];
+			//maybe square root it? test in an ~environment~
+			Team* chosenTeam = candidates[std::floor(std::cbrt(std::rand() % static_cast<int>(candidates.size())))];
 		
 			//increment # matches
 			chosenTeam->matchesPlayed++;
@@ -158,10 +159,11 @@ void prepareScheduleCSV() {
 				for (int d = 0; d < sizeof(allTeams); d++) {
 					Team* elm = allTeams[d];
 					bool isCandidate = std::count(candidates.begin(), candidates.end(), elm) > 0;
+					bool isOnCooldown = std::find(std::begin(onCooldown), std::end(onCooldown), elm) != std::end(onCooldown);
 					//and not on cooldown
-					if (!isCandidate && elm->matchesPlayed == MATCH_CAP + thresholdShift && ) {
+					if (!isCandidate && elm->matchesPlayed == MATCH_CAP + thresholdShift && !isOnCooldown) {
 						//maybe doesn't work
-						forcedCandidates[forcedCandidates.end() - 1] == elm;
+						forcedCandidates[forcedCandidates.size() - 1] == elm;
 					}
 				}
 

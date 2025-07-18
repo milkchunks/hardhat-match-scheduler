@@ -5,11 +5,15 @@
 #include "Scheduler.h"
 
 #include <string>
+#include <vector>
 
 #include "CSVWriter.h"
 //.cpp: fill out what was outlined in .h
-Scheduler::Scheduler(std::string names[]) {
-    teamNames = names;
+Scheduler::Scheduler(std::vector<std::string> names) {
+
+    for (int i = 0; i < names.size(); i++) {
+        teamNames[i].assign(1, names[i]);
+    }
     //update all CSVs with new names.
     prepareTeamCSV();
 }

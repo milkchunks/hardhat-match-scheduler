@@ -7,27 +7,13 @@
 #include <string>
 #include <vector>
 
+#include "Team.h"
+
 
 //.h: declare what is in the class (?)
 class Scheduler {
     private:
-    static std::string teamNames[];
-
-    //idfk if this is good practice :(
-    //i don't think it was even good practice in java
-    //note: inner classes are NOT hoisted
-    static class Team {
-        public:
-        int numMatchesPlayed = 0;
-        int teamNumber;
-        std::string toString() {
-            return "Team[num: " + std::to_string(teamNumber) + ", matches: " + std::to_string(numMatchesPlayed) + "]";
-        }
-
-        Team(int num) {
-            teamNumber = num;
-        }
-    };
+    static std::vector<std::string> teamNames[];
 
     static std::vector<Team> sortAscending();
 
@@ -35,7 +21,7 @@ class Scheduler {
     static void changeTeamNames(std::string newNames[]);
     static void prepareTeamCSV();
     static void prepareScheduleCSV();
-    Scheduler(std::string teamNames[]);
+    Scheduler(std::vector<std::string> names);
 };
 
 

@@ -4,11 +4,15 @@
 
 #ifndef TEAM_H
 #define TEAM_H
-
+#include <string>
 
 
 class Team {
-
+    public:
+        int matchesPlayed;
+        static int teamNumber;
+        std::string toString();
+        Team(int num);
 };
 
 

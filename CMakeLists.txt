@@ -9,4 +9,6 @@ add_executable(scheduler_rewrite_c__ main.cpp
         CSVWriter.cpp
         CSVWriter.h
         UI.cpp
-        UI.h)
+        UI.h
+        Team.cpp
+        Team.h)

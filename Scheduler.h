@@ -14,8 +14,7 @@
 class Scheduler {
     private:
     static std::vector<std::string> teamNames;
-    static std::vector<Team> sortAscending(std::vector<Team> arr);
-    static bool teamListContains(std::vector<Team> arr, Team val);
+    static std::vector<Team*> sortAscending(std::vector<Team*> arr);
 
     public:
     static void changeTeamNames(std::vector<std::string> names);

@@ -8,6 +8,8 @@
 
 #include "Scheduler.h"
 
+#include <algorithm>
+#include <cmath>
 #include <string>
 #include <vector>
 
@@ -70,30 +72,6 @@ void Scheduler::changeTeamNames(std::vector<std::string> names) {
 	prepareTeamCSV();
 }
 
-//done
-std::vector<Team> Scheduler::sortAscending(std::vector<Team> arr) {
-    for (int i = 1; i < arr.size(); i++) {
-        Team temp = arr[i];
-        int j = i-1;
-
-        while (j >= 0 && arr[j].matchesPlayed > temp.matchesPlayed) {
-            arr[j+1] = arr[j];
-            j = j-1;
-        }
-        arr[j+1] = temp;
-    }
-
-    return arr;
-}
-
-//done? null checking
-static bool teamListContains(std::vector<Team> arr, Team val) {
-    for (int i = 0; i < arr.size(); i++) {\
-        //todo: CANNOT CHECK FOR NULL.
-        if (arr[i] == val) return true;
-    }
-}
-
 //todo: setting for how many matches long cooldown is?
 //todo: issue, 1 team 7 matches 1 team 9 matches
 //todo: issue in the comment on the livestream
@@ -108,92 +86,115 @@ void prepareScheduleCSV() {
 	int COOLDOWN_LENGTH = 1;
 
 	//no delete bc no new keyword?
-	//TODO: REMEMBER TO DELETE ALL THESE TEAMS ONCE THE METHOD IS OVER. iterate through allTeams()
+	//TODO: REMEMBER TO DELETE ALL THESE TEAMS ONCE THE METHOD IS OVER. iterate through allTeams
 
-	Team allTeams[NUM_TEAMS];
+	//i think i want team pointers? TODO: delete pointers!!! you're allocating a shit ton of pointers in all these lists, go through and delete them all later
+	Team* allTeams[NUM_TEAMS];
 	//a candidate is a team that both hasn't played all their matches and isn't on cooldown
-	std::vector<Team> candidates;
+	std::vector<Team*> candidates;
 	//all teams are candidates at first
-	for (int a = 1; a < NUM_TEAMS + 1; a_++) {
-		allTeams[i] = new Team(a);
-		candidates[i] = allTeams[i];
+	for (int a = 1; a < NUM_TEAMS + 1; a++) {
+		allTeams[a] = new Team(a);
+		candidates[a] = allTeams[a];
 	}
 
 	
-	std::vector<std::vector<Team>> matches;
-	Team onCooldown[MATCH_SIZE];
+	std::vector<std::vector<Team*>> matches;
+
+	//does NOT try to initialize all the teams
+	//todo: expandable cooldown size
+	Team* onCooldown[MATCH_SIZE];
 
 	int MATCH_COUNT = 0;
 	while (!candidates.empty()) {
 		//vector of size MATCH_SIZE. calls the constructor!
-		std::vector<Team> thisMatch(MATCH_SIZE);
+		std::vector<Team*> thisMatch(MATCH_SIZE);
 		
 		//this loop populates a match
-		for (int j = 0; j < sizeof(thisMatch); j++) {
+		for (int j = 0; j < thisMatch.size(); j++) {
 			//cube root to make it trend towards smaller indices (the candidates who have played the least games!)
-			Team chosenTeam = candidates[std::floor(std::cbrt(std::rand()) % candidiates.size())];
-		}
+			Team* chosenTeam = candidates[std::floor(std::cbrt(std::rand()) % candidates.size())];
 		
-		//increment # matches
-		chosenTeam.numMatchesPlayed++;
+			//increment # matches
+			chosenTeam->matchesPlayed++;
 
-		//if a team has played all their matches, remove them from candidates
-		if (chosenTeam.numMatchesPlayed >= MATCH_CAP) {
-			//todo: erase chosenTeam from candidates
-		}
-
-		//add the chosen team to this match
-		thisMatch[j] = chosenTeam;
-	}
-
-	//add this newly populated match to the end of matches
-	matches.push_back(thisMatch);
-
-	//now that we've populated the new match, replace who's on cooldown
-	//TODO: i believe this is where the null is
-	for (int b = 0; b < MATCH_SIZE; b++) {
-		Team temp = onCooldown[b];
-		onCooldown[b] = thisMatch[b];
-		//make teams on cooldown no longer candidates
-		//todo: erase onCooldown[b] from candidates
-	}
-
-	//only force if there are candidates who haven't played their matches
-	if (!candidates.empty()) {
-		//assemble a list of teams who are not on cooldown AND have exactly hit their match limit AND are not already candidates
-		//if there aren't enough after doing that, increase the match count requirement until we have enough candidates to force
-		std::vector<Team> forcedCandidates;
-
-		//starts at zero to assemble forcedCandidates
-                //this value is how much are we willing to fudge the match # cutoff to let all candidates play at least MATCH_CAP games, starting with one
-		int thresholdShift = 0;
-
-		//if, even after including those who have hit their limit, we don't have enough candidates, keep fudging the threshold until we do.
-                //if we do have enough candidates, this is skipped so it's not too strenuous
-		while (forcedCandidates.size() + candidates.size() < MATCH_SIZE) {
-			//TODO: this will just add the first teams that can be forced (adds 1, 2, 3, etc.) choose random from allTeams? or grab ALL the forced candidates, increase threshold shift if you don't have enough, then grab randomly from that
-			for (int d = 0; d < allTeams.size(); d++) {
-				Team elm = allTeams[d];
-				bool isCandidate = std::count(candidates.begin(), candidates.end(), elm) > 0;
-				if (!isCandidate && elm.numMatches == MATCH_CAP + thresholdShift && std::find(elm, onCooldown) != onCooldown.end()) {
-					//maybe doesn't work
-					forcedCandidates[forcedCandidates.end() - 1] == elm;
-				}
+			//if a team has played all their matches, remove them from candidates
+			if (chosenTeam->matchesPlayed >= MATCH_CAP) {
+				//todo: erase chosenTeam from candidates
 			}
 
-			//increase threshold shift and go again
-			thresholdShift++;
+			//add the chosen team to this match
+			thisMatch[j] = chosenTeam;
 		}
 
-		//add all the forced candidates
-		for (int f = 0; f < forcedCandidates.size(); f++) {
-			int index = std::rand() % forcedCandidates.size();
-			candidates.push_back(forcedCandidates[index]);
-			//TODO: remove the chosen forced candidate
+		//add this newly populated match to the end of matches
+		matches.push_back(thisMatch);
+
+		//now that we've populated the new match, replace who's on cooldown
+		//TODO: i believe this is where the null is
+		for (int b = 0; b < MATCH_SIZE; b++) {
+			Team* temp = onCooldown[b];
+			onCooldown[b] = thisMatch[b];
+			//make teams on cooldown no longer candidates
+			//todo: erase onCooldown[b] from candidates
+			delete temp;
 		}
+
+		//only force if there are candidates who haven't played their matches
+		//check again if candidates are empty after filling matches
+		if (!candidates.empty()) {
+			//assemble a list of teams who are not on cooldown AND have exactly hit their match limit AND are not already candidates
+			//if there aren't enough after doing that, increase the match count requirement until we have enough candidates to force
+			std::vector<Team*> forcedCandidates;
+
+			//starts at zero to assemble forcedCandidates
+			//this value is how much are we willing to fudge the match # cutoff to let all candidates play at least MATCH_CAP games, starting with one
+			int thresholdShift = 0;
+
+			//if, even after including those who have hit their limit, we don't have enough candidates, keep fudging the threshold until we do.
+			//if we do have enough candidates, this is skipped so it's not too strenuous
+			while (forcedCandidates.size() + candidates.size() < MATCH_SIZE) {
+				//TODO: this will just add the first teams that can be forced (adds 1, 2, 3, etc.) choose random from allTeams? or grab ALL the forced candidates, increase threshold shift if you don't have enough, then grab randomly from that
+				for (int d = 0; d < sizeof(allTeams); d++) {
+					Team* elm = allTeams[d];
+					bool isCandidate = std::count(candidates.begin(), candidates.end(), elm) > 0;
+					//and not on cooldown
+					if (!isCandidate && elm->matchesPlayed == MATCH_CAP + thresholdShift && ) {
+						//maybe doesn't work
+						forcedCandidates[forcedCandidates.end() - 1] == elm;
+					}
+				}
+
+				//increase threshold shift and go again
+				thresholdShift++;
+			}
+
+			//add all the forced candidates
+			for (int f = 0; f < forcedCandidates.size(); f++) {
+				int index = std::rand() % forcedCandidates.size();
+				candidates.push_back(forcedCandidates[index]);
+				//TODO: remove the chosen forced candidate
+			}
+		}
+
+		//after everything, sort the candidates by matches played in ascending order cuz the randomizer prefers lower indices
+		candidates = sortAscending(candidates);
+		MATCH_COUNT++;
 	}
-
-	//after everything, sort the candidates by matches played in ascending order cuz the randomizer prefers lower indices
-	candidates = sortAscending(candidates);
-	MATCH_COUNT++;
 }
+
+	//done
+std::vector<Team*> Scheduler::sortAscending(std::vector<Team*> arr) {
+		for (int i = 1; i < arr.size(); i++) {
+			Team* temp = arr[i];
+			int j = i-1;
+
+			while (j >= 0 && arr[j]->matchesPlayed > temp->matchesPlayed) {
+				arr[j+1] = arr[j];
+				j = j-1;
+			}
+			arr[j+1] = temp;
+		}
+
+		return arr;
+	};
